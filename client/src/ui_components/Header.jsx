@@ -23,7 +23,7 @@ const Header = ({darkMode,handleDarkMode}) => {
               className="menu-btn md:!hidden"
               onClick={() => setNavOpen((prev) => !prev)}
             >
-              <span className="material-symbols-rounded md:!hidden">
+              <span className="material-symbols-rounded md:!hidden dark:text-white">
                 {navOpen ? "close" : "menu"}
               </span>
             </button>

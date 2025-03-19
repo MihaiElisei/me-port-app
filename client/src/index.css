@@ -115,7 +115,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-[Lora];
   }
 }
 
@@ -124,6 +124,39 @@
 
 html{
   scroll-behavior: smooth;
+}
+
+
+/* UTILITIES */
+/* ================================ */
+
+.container {
+  @apply px-4 mx-auto lg:px-8 xl:max-w-6xl
+}
+
+.section {
+  @apply pt-28 lg:pt-32 font-[Lora]
+}
+
+
+/* TYPOGRAPHY */
+/* ================================ */
+
+.dark .headline-1,
+.dark .headline-2,
+.dark .about-text{
+  background: -webkit-linear-gradient(0deg, #fafafa, #a1a1a1);
+  -webkit-background-clip: text;
+  background-clip: text; 
+  -webkit-text-fill-color: transparent;
+}
+
+.headline-1 {
+  @apply text-4xl mx-auto md:mx-0 md:text-5xl leading-tight font-semibold lg:text-[55px] lg:leading-[1.15]
+}
+
+.headline-2 {
+  @apply text-3xl lg:text-4xl lg:leading-tight font-semibold font-[Montserrat] mt-8
 }
 
 /* COMPONENTS */
