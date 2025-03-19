@@ -1,3 +1,8 @@
+/**
+ * @copyright 2025 Mihai Elisei
+ * @license Apache-2.0
+ */
+
 import { useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 

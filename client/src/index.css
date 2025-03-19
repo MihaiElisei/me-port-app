@@ -151,12 +151,20 @@ html{
   -webkit-text-fill-color: transparent;
 }
 
+.gradient-text {
+  
+}
+
 .headline-1 {
-  @apply text-4xl mx-auto md:mx-0 md:text-5xl leading-tight font-semibold lg:text-[55px] lg:leading-[1.15]
+  @apply text-4xl text-slate-900 mx-auto md:mx-0 md:text-5xl leading-tight font-semibold lg:text-[55px] lg:leading-[1.15]
 }
 
 .headline-2 {
   @apply text-3xl lg:text-4xl lg:leading-tight font-semibold font-[Montserrat] mt-8
+}
+
+.title-1 {
+  @apply text-[22px] font-[Montserrat]
 }
 
 /* COMPONENTS */
@@ -165,7 +173,7 @@ html{
 /* Navbar */
 
 .navbar {
-  @apply absolute top-full mt-2 right-0 min-w-40 p-2 bg-black dark:bg-zinc-50/10 rounded-2xl ring-inset ring-1 ring-zinc-50/5 dark:ring-zinc-50/5 scale-90 isolate blur-sm opacity-0 invisible transition-[opacity,transform,filter] md:static md:flex md:items-center md:mt-0 md:opacity-100 md:blur-none md:visible md:scale-100 backdrop-blur-2xl
+  @apply absolute top-full mt-2 right-0 min-w-40 p-2 bg-slate-900 dark:bg-zinc-50/10 rounded-2xl ring-inset ring-1 ring-zinc-50/5 dark:ring-zinc-50/5 scale-90 isolate blur-sm opacity-0 invisible transition-[opacity,transform,filter] md:static md:flex md:items-center md:mt-0 md:opacity-100 md:blur-none md:visible md:scale-100 backdrop-blur-2xl
 }
 
 .navbar.active{

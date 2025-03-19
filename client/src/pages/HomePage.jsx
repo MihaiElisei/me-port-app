@@ -13,10 +13,10 @@ const HomePage = () => {
       <div className="container lg:grid lg:grid-cols-2 items-center lg:gap-10">
         <div>
           <div className="flex items-center gap-3">
-            <span className="material-symbols-rounded dark:text-white">
+            <span className="material-symbols-rounded dark:text-slate-100">
               task_alt
             </span>
-            <div className="flex items-center gap-1.5 text-black dark:text-zinc-400 text-sm tracking-wide">
+            <div className="flex items-center gap-1.5 text-slate-900 dark:text-zinc-400 text-sm tracking-wide">
               <span className="relative w-2 h-2 rounded-full bg-emerald-400">
                 <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping"></span>
               </span>
@@ -27,7 +27,7 @@ const HomePage = () => {
             Crafting Scalable, High-Performance Websites Optimized for the
             Future of Digital Innovation
           </h2>
-          <Button className="h-11 mx-auto md:mx-0 flex items-center gap-x-2">
+          <Button className="h-11 mx-auto md:mx-0 flex items-center gap-x-2 bg-slate-900 dark:bg-zinc-200 dark:text-zinc-900">
             Download CV
             <span className="material-symbols-rounded">download</span>
           </Button>
