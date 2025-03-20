@@ -9,21 +9,15 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 const AppLayout = () => {
-  // Default to dark mode
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("dark") !== "false" // Default to true if null
-  );
+  const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
-    if (localStorage.getItem("dark") === null) {
-      localStorage.setItem("dark", "true"); // Default to dark mode
-    }
-  }, []);
+    localStorage.setItem("dark", darkMode ? "true" : "false");
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
   const handleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    localStorage.setItem("dark", newDarkMode ? "true" : "false");
+    setDarkMode((prev) => !prev);
   };
 
   return (
