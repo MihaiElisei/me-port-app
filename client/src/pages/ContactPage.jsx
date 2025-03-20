@@ -6,7 +6,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 
 const ContactPage = () => {
@@ -19,7 +26,7 @@ const ContactPage = () => {
   });
 
   const onSubmit = (data, e) => {
-    e.preventDefault()
+    e.preventDefault();
     console.log("Form Submitted:", data);
     alert("Message sent successfully!"); // Replace with actual form submission logic
   };
@@ -27,19 +34,30 @@ const ContactPage = () => {
   return (
     <section className="section">
       <div className="container max-w-lg mx-auto">
-        <h2 className="headline-2 text-slate-900 dark:text-zinc-400 py-5 text-center">Get in Touch.</h2>
+        <h2 className="headline-2 text-slate-900 dark:text-zinc-400 py-5 text-center">
+          Get in Touch.
+        </h2>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 dm:w-[70%] mx-auto">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 dm:w-[70%] mx-auto"
+          >
             {/* Name Field */}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">Name</FormLabel>
+                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">
+                    Name
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} className="placeholder:text-slate-900 dark:placeholder:text-zinc-400" placeholder="Enter your name" />
+                    <Input
+                      {...field}
+                      className="placeholder:text-slate-900 dark:placeholder:text-zinc-400"
+                      placeholder="Enter your name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -52,9 +70,16 @@ const ContactPage = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">Email</FormLabel>
+                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">
+                    Email
+                  </FormLabel>
                   <FormControl>
-                    <Input type="email" className="placeholder:text-slate-900 dark:placeholder:text-zinc-400" {...field} placeholder="Enter your email" />
+                    <Input
+                      type="email"
+                      className="placeholder:text-slate-900 dark:placeholder:text-zinc-400"
+                      {...field}
+                      placeholder="Enter your email"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -67,9 +92,15 @@ const ContactPage = () => {
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">Message</FormLabel>
+                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">
+                    Message
+                  </FormLabel>
                   <FormControl>
-                    <Textarea className="placeholder:text-slate-900 dark:placeholder:text-zinc-400 h-50" {...field} placeholder="Write your message..." />
+                    <Textarea
+                      className="placeholder:text-slate-900 dark:placeholder:text-zinc-400 h-50"
+                      {...field}
+                      placeholder="Write your message..."
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,7 +108,12 @@ const ContactPage = () => {
             />
 
             {/* Submit Button */}
-            <Button type="submit" className="w-fit bg-slate-900 text-slate-200 hover:bg-slate-800 dark:bg-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-700 hover:cursor-pointer">Send Message</Button>
+            <Button
+              type="submit"
+              className="w-fit py-2 flex items-center gap-x-2 text-slate-100 bg-slate-900 hover:bg-slate-800 dark:bg-zinc-200 dark:hover:bg-zinc-400 dark:text-zinc-900 cursor-pointer"
+            >
+              Send Message
+            </Button>
           </form>
         </Form>
       </div>

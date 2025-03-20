@@ -31,7 +31,7 @@ const AppLayout = () => {
       <main className="w-full min-h-[100vh] bg-slate-100 dark:bg-zinc-900">
         <Header darkMode={darkMode} handleDarkMode={handleDarkMode} />
         <Outlet context={{ darkMode }} />
-        <Footer />
+        <Footer darkMode={darkMode} />
       </main>
     </div>
   );

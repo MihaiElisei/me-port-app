@@ -44,10 +44,20 @@ const Navbar = ({ navOpen }) => {
           key={key}
           to={path}
           className={({ isActive }) => {
-            if (path === "/portfolio" && location.pathname.startsWith("/project/")) {
+            if (
+              path === "/portfolio" &&
+              location.pathname.startsWith("/project/")
+            ) {
               return "nav-link active";
             }
             if (path === "/blog" && location.pathname.startsWith("/blog/")) {
+              return "nav-link active";
+            }
+            if (
+              path === "/login" &&
+              (location.pathname.startsWith("/forgot-password") ||
+                location.pathname.startsWith("/register"))
+            ) {
               return "nav-link active";
             }
             return isActive ? "nav-link active" : "nav-link";
