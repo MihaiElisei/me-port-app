@@ -11,6 +11,7 @@ import PortfolioPage from "./pages/PortfolioPage";
 import ArticlesPage from "./pages/ArticlesPage";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
+import ProjectDetail from "./pages/ProjectDetail";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
+          <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/articles" element={<ArticlesPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/login" element={<LoginPage />} />

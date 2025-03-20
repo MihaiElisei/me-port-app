@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const AppLayout = () => {
   // Default to dark mode
@@ -30,6 +31,7 @@ const AppLayout = () => {
       <main className="w-full min-h-[100vh] bg-slate-100 dark:bg-zinc-900">
         <Header darkMode={darkMode} handleDarkMode={handleDarkMode} />
         <Outlet context={{ darkMode }} />
+        <Footer />
       </main>
     </div>
   );

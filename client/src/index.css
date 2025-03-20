@@ -151,10 +151,6 @@ html{
   -webkit-text-fill-color: transparent;
 }
 
-.gradient-text {
-  
-}
-
 .headline-1 {
   @apply text-4xl text-slate-900 mx-auto md:mx-0 md:text-5xl leading-tight font-semibold lg:text-[55px] lg:leading-[1.15]
 }
