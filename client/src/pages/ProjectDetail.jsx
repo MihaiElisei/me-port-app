@@ -45,7 +45,13 @@ const ProjectDetail = () => {
             {project.projectLink}
           </Link>
         )}
+        <div className="mt-6">
+          <Link to="/portfolio" className="text-gray-700 dark:text-gray-300 hover:underline">
+            ← Back to Projects
+          </Link>
+        </div>
       </div>
+      
     </section>
   );
 };
