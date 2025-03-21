@@ -4,9 +4,9 @@
  */
 
 import { Button } from "@/components/ui/button";
-import { useOutletContext } from "react-router-dom";
+
+
 const HomePage = () => {
-  const { darkMode } = useOutletContext();
 
   return (
     <section className="section">

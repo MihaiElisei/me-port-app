@@ -66,6 +66,13 @@ class Project(models.Model):
         super().save(*args, **kwargs)
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Article(models.Model):
     CATEGORY_CHOICES = [
         ("tech", "Technology"),
@@ -84,12 +91,31 @@ class Article(models.Model):
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     content = models.TextField()
     article_image = models.ImageField(upload_to="articles/", null=True, blank=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="articles", null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published_date = models.DateTimeField(null=True, blank=True)
+    is_draft = models.BooleanField(default=True)
+    categories = models.ManyToManyField("Category", related_name="articles")
+
+    class Meta:
+        ordering = ["-published_date"]
+
+    def __str__(self):
+        return self.title
+
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+    content = models.TextField()
+    article_image = models.ImageField(upload_to="articles/", null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="articles", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_date = models.DateTimeField(null=True, blank=True)
     is_draft = models.BooleanField(default=True)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="tech")
+    categories = models.ManyToManyField(Category, related_name="articles")  
 
     class Meta:
         ordering = ["-published_date"]
@@ -111,7 +137,6 @@ class Article(models.Model):
             self.published_date = timezone.now()
 
         super().save(*args, **kwargs)
-
 
 
 class Technology(models.Model):

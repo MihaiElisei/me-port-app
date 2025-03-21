@@ -98,6 +98,16 @@ def article_list(request):
     return paginator.get_paginated_response(serializer.data)
 
 
+@api_view(['GET'])
+def article_detail(request, slug):
+    article = Article.objects.filter(slug=slug).first()
+    if not article:
+        return Response({"error": "Article not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ArticleSerializer(article)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_article(request, pk):

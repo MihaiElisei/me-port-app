@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Article, Project, Technology
+from .models import Article, Category, Project, Technology
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
 
@@ -23,9 +23,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return new_user
     
 class SimpleAuthorSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
     class Meta:
         model = get_user_model()
-        fields = ['id', 'username', 'first_name', 'last_name']
+        fields = ['id', 'username', 'first_name', 'last_name', 'profile_image', 'full_name' ]
+    
+    def get_full_name(self, obj):
+        return obj.get_full_name() if obj.first_name or obj.last_name else obj.username
 
 class UpdateProfileUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,11 +37,19 @@ class UpdateProfileUserSerializer(serializers.ModelSerializer):
         fields = ['id','email', 'username', 'first_name', 'last_name', 'profile_image']
         extra_kwargs = {'password': {'write_only': True}}
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name"]
+
+
 class ArticleSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)  
     author = SimpleAuthorSerializer(read_only=True)
+    
     class Meta:
         model = Article
-        fields = ['id', 'title','slug', 'content', 'article_image', 'author', 'created_at', 'updated_at', 'published_date', 'is_draft', 'category']
+        fields = "__all__"  
 
 
 class ProjectSerializer(serializers.ModelSerializer):
