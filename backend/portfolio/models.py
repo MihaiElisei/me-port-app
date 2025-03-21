@@ -34,7 +34,7 @@ class Project(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     description = models.TextField()
-    image = models.ImageField(upload_to="projects/", null=True, blank=True)
+    project_image = models.ImageField(upload_to="projects/", null=True, blank=True)
     technologies = models.ManyToManyField("Technology", blank=True)   
     github_link = models.URLField(blank=True, null=True)
     live_demo = models.URLField(blank=True, null=True)
@@ -83,7 +83,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     content = models.TextField()
-    image = models.ImageField(upload_to="articles/", null=True, blank=True)
+    article_image = models.ImageField(upload_to="articles/", null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="articles", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -115,7 +115,36 @@ class Article(models.Model):
 
 
 class Technology(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    TECHNOLOGY_CHOICES = [
+        ("python", "Python"),
+        ("django", "Django"),
+        ("flask", "Flask"),
+        ("fastapi", "FastAPI"),
+        ("javascript", "JavaScript"),
+        ("typescript", "TypeScript"),
+        ("react", "React"),
+        ("nextjs", "Next.js"),
+        ("vue", "Vue.js"),
+        ("angular", "Angular"),
+        ("nodejs", "Node.js"),
+        ("express", "Express.js"),
+        ("mongodb", "MongoDB"),
+        ("postgresql", "PostgreSQL"),
+        ("mysql", "MySQL"),
+        ("firebase", "Firebase"),
+        ("aws", "AWS"),
+        ("docker", "Docker"),
+        ("kubernetes", "Kubernetes"),
+        ("git", "Git"),
+        ("github", "GitHub"),
+        ("gitlab", "GitLab"),
+        ("bitbucket", "Bitbucket"),
+        ("other", "Other"),
+    ]
+
+    name = models.CharField(max_length=50, choices=TECHNOLOGY_CHOICES, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.get_name_display()  
+
+
