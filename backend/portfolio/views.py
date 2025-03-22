@@ -56,6 +56,15 @@ def project_list(request):
     serializer = ProjectSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
 
+@api_view(["GET"])
+def project_detail(request, slug):
+    project = Project.objects.filter(slug=slug).first()
+    if not project:
+        return Response({"error": "project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ProjectSerializer(project)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_project(request, pk):

@@ -3,7 +3,6 @@
  * @license Apache-2.0
  */
 
-
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { get_article_detail } from "../services/articleService";
@@ -32,7 +31,7 @@ const ArticleDetail = () => {
 
     fetchArticle();
   }, [slug]);
-  console.log(article);
+
   if (isLoading) return <Spinner />;
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!article) return <p className="text-gray-500">Article not found</p>;

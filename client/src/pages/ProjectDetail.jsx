@@ -3,55 +3,116 @@
  * @license Apache-2.0
  */
 
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { works } from "@/data/projects";
-
+import { get_project_detail } from "../services/prejectService";
+import Spinner from "../ui_components/Spinner";
+import { baseURL } from "@/api";
 
 const ProjectDetail = () => {
-  const { slug } = useParams(); // Get project slug from URL
-  const project = works.find((work) => work.slug === slug); // Find the project
+  const { slug } = useParams();
+  const [project, setProject] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!project) {
-    return <div className="text-center text-red-500 mt-10">Project not found!</div>;
-  }
+  useEffect(() => {
+    const fetchProject = async () => {
+      setIsLoading(true);
+      try {
+        const data = await get_project_detail(slug);
+        setProject(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProject();
+  }, [slug]);
+
+  if (isLoading) return <Spinner />;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
+  if (!project) return <p className="text-gray-500">Project not found</p>;
 
   return (
     <section className="section">
       <div className="container">
-        <h2 className="text-3xl md:text-5xl text-slate-900 dark:text-zinc-400">{project.title}</h2>
-        <figure className="img-box  mb-4 mt-10">
-          <img src={project.imgSrc} alt={project.title} className="img-cover rounded-lg" />
-        </figure>
-        <p className="text-lg text-slate-900 dark:text-zinc-400 mb-4 font-[Montserrat]">
+        {/* Project Title */}
+        <h2 className="text-3xl md:text-5xl text-slate-900 dark:text-zinc-400 mb-5">
+          {project.title}
+        </h2>
+
+        {/* Project Image */}
+        {project.project_image && (
+          <figure className="rounded-lg mb-4 mt-10">
+            <img
+              src={`${baseURL}${project.project_image}`}
+              alt={project.title}
+              className="w-fit max-h-[70vh] rounded-lg shadow-md"
+            />
+          </figure>
+        )}
+
+        {/* Project Description */}
+        <p className="text-lg text-slate-900 dark:text-zinc-400 mb-4">
           {project.description || "No description available."}
         </p>
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          {project.tags.map((tag, index) => (
+
+        {/* Categories */}
+        {project.category && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-zinc-200 px-3 py-1 text-xs rounded capitalize">
+              {project.category}
+            </span>
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-2 mt-3">
+          {project.technologies.map((tech, index) => (
             <span
               key={index}
-              className="h-8 text-sm text-slate-900 dark:text-zinc-400 bg-slate-300 dark:bg-zinc-50/5 grid items-center px-3 rounded-lg"
+              className="bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-zinc-200 px-3 py-1 text-xs rounded capitalize"
             >
-              {tag}
+              {tech}
             </span>
           ))}
         </div>
-        {project.projectLink && (
-          <Link
-            to={project.projectLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-slate-900 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-zinc-200 underline"
-          >
-            {project.projectLink}
-          </Link>
-        )}
+
+        {/* Live Demo & GitHub Links */}
+        <div className="mt-4">
+          {project.live_demo && (
+            <Link
+              to={project.live_demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              Live Demo
+            </Link>
+          )}
+          {project.github_link && (
+            <Link
+              to={project.github_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-blue-600 dark:text-blue-400 hover:underline mt-2"
+            >
+              GitHub Repository
+            </Link>
+          )}
+        </div>
+
+        {/* Back Button */}
         <div className="mt-6">
-          <Link to="/portfolio" className="text-gray-700 dark:text-gray-300 hover:underline">
+          <Link
+            to="/portfolio"
+            className="text-gray-700 dark:text-gray-300 hover:underline"
+          >
             ← Back to Projects
           </Link>
         </div>
       </div>
-      
     </section>
   );
 };

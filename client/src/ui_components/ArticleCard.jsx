@@ -24,19 +24,9 @@ const ArticleCard = ({ article }) => {
           {article.content.substring(0, 100)}...
         </p>
         <div className="flex flex-wrap gap-2 mt-3">
-          {article.categories.map((category) => (
-            <span
-              key={category.id}
-              className="bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-zinc-200 px-3 py-1 text-xs rounded capitalize"
-            >
-              <span
-                key={category.id}
-                className="bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-zinc-200 px-3 ga py-1 text-xs rounded"
-              >
-                {category.name}
-              </span>
-            </span>
-          ))}
+          <span className="bg-slate-200 dark:bg-zinc-700 text-slate-800 dark:text-zinc-200 px-3 py-1 text-xs rounded capitalize">
+            {article.category}
+          </span>
         </div>
 
         <div className="flex-grow"></div>

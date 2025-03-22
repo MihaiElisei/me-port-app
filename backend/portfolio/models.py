@@ -1,23 +1,28 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.conf import settings
 from django.utils.text import slugify
 from django.utils import timezone
-
+from django.conf import settings
 
 class CustomUser(AbstractUser):
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(unique=True)
-    profile_image = models.ImageField(upload_to="profile_pics/", null=True, blank=True)
+    profile_image = models.ImageField(upload_to="profile_pics/", null=True, blank=True) 
 
-    USERNAME_FIELD = "email"  
-    REQUIRED_FIELDS = ["username"]  
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
         return self.email
 
+class Technology(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class Project(models.Model):
+
     PROJECT_CATEGORIES = [
         ("web_dev", "Web Development"),
         ("mobile_app", "Mobile App Development"),
@@ -35,10 +40,10 @@ class Project(models.Model):
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     description = models.TextField()
     project_image = models.ImageField(upload_to="projects/", null=True, blank=True)
-    technologies = models.ManyToManyField("Technology", blank=True)   
+    technologies = models.ManyToManyField(Technology, related_name="projects")
     github_link = models.URLField(blank=True, null=True)
     live_demo = models.URLField(blank=True, null=True)
-    category = models.CharField(max_length=50, choices=PROJECT_CATEGORIES, default="web_dev")
+    category = models.CharField(max_length=50, choices=PROJECT_CATEGORIES,default="other")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_date = models.DateTimeField(null=True, blank=True)
@@ -51,7 +56,7 @@ class Project(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.slug:  
+        if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug
             n = 1
@@ -60,20 +65,14 @@ class Project(models.Model):
                 n += 1
             self.slug = slug
 
-        if not self.is_draft and self.published_date is None:
+        if not self.is_draft and not self.published_date:
             self.published_date = timezone.now()
 
         super().save(*args, **kwargs)
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Article(models.Model):
+
     CATEGORY_CHOICES = [
         ("tech", "Technology"),
         ("programming", "Programming"),
@@ -85,6 +84,7 @@ class Article(models.Model):
         ("data_science", "Data Science"),
         ("finance", "Finance & Investment"),
         ("design", "UI/UX & Product Design"),
+        ("other", "Other")
     ]
 
     title = models.CharField(max_length=255)
@@ -98,33 +98,13 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published_date = models.DateTimeField(null=True, blank=True)
     is_draft = models.BooleanField(default=True)
-    categories = models.ManyToManyField("Category", related_name="articles")
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="other")
 
     class Meta:
         ordering = ["-published_date"]
-
-    def __str__(self):
-        return self.title
-
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, blank=True)
-    content = models.TextField()
-    article_image = models.ImageField(upload_to="articles/", null=True, blank=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="articles", null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    published_date = models.DateTimeField(null=True, blank=True)
-    is_draft = models.BooleanField(default=True)
-    categories = models.ManyToManyField(Category, related_name="articles")  
-
-    class Meta:
-        ordering = ["-published_date"]
-
-    def __str__(self):
-        return self.title
 
     def save(self, *args, **kwargs):
-        if not self.slug:  
+        if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug
             n = 1
@@ -133,43 +113,8 @@ class Article(models.Model):
                 n += 1
             self.slug = slug
 
-        if not self.is_draft and self.published_date is None:
+        if not self.is_draft and not self.published_date:
             self.published_date = timezone.now()
 
         super().save(*args, **kwargs)
-
-
-class Technology(models.Model):
-    TECHNOLOGY_CHOICES = [
-        ("python", "Python"),
-        ("django", "Django"),
-        ("flask", "Flask"),
-        ("fastapi", "FastAPI"),
-        ("javascript", "JavaScript"),
-        ("typescript", "TypeScript"),
-        ("react", "React"),
-        ("nextjs", "Next.js"),
-        ("vue", "Vue.js"),
-        ("angular", "Angular"),
-        ("nodejs", "Node.js"),
-        ("express", "Express.js"),
-        ("mongodb", "MongoDB"),
-        ("postgresql", "PostgreSQL"),
-        ("mysql", "MySQL"),
-        ("firebase", "Firebase"),
-        ("aws", "AWS"),
-        ("docker", "Docker"),
-        ("kubernetes", "Kubernetes"),
-        ("git", "Git"),
-        ("github", "GitHub"),
-        ("gitlab", "GitLab"),
-        ("bitbucket", "Bitbucket"),
-        ("other", "Other"),
-    ]
-
-    name = models.CharField(max_length=50, choices=TECHNOLOGY_CHOICES, unique=True)
-
-    def __str__(self):
-        return self.get_name_display()  
-
 
