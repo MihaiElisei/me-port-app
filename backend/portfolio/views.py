@@ -7,6 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.pagination import PageNumberPagination
 from .models import Article, Project
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -141,3 +145,30 @@ def delete_article(request, pk):
     return Response({"message": "Article deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
+@csrf_exempt  
+def contact(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            name = data.get("name")
+            email = data.get("email")
+            message = data.get("message")
+
+            if not name or not email or not message:
+                return JsonResponse({"error": "All fields are required."}, status=400)
+
+            # Send Email
+            send_mail(
+                subject=f"New Contact Form Submission from {name}",
+                message=f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}",
+                from_email=email, 
+                recipient_list=["mihai.m.elisei@gmail.com"],  
+                fail_silently=False,
+            )
+
+            return JsonResponse({"message": "Email sent successfully!"})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method."}, status=405)

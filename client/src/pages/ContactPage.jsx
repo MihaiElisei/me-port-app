@@ -3,32 +3,45 @@
  * @license Apache-2.0
  */
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { baseURL } from "@/api";
 
 const ContactPage = () => {
-  const form = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      message: "",
-    },
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
 
-  const onSubmit = (data, e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", data);
-    alert("Message sent successfully!"); // Replace with actual form submission logic
+    setLoading(true);
+    setResponseMessage("");
+
+    try {
+      const response = await fetch(`${baseURL}/contact/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setResponseMessage("Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setResponseMessage(result.error || "Something went wrong.");
+      }
+    } catch (error) {
+      setResponseMessage("Failed to send message. Try again.");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -38,84 +51,26 @@ const ContactPage = () => {
           Get in Touch.
         </h2>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 dm:w-[70%] mx-auto"
-          >
-            {/* Name Field */}
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">
-                    Name
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="placeholder:text-slate-900 dark:placeholder:text-zinc-400"
-                      placeholder="Enter your name"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {responseMessage && (
+          <p className={`text-center ${responseMessage.includes("success") ? "text-green-500" : "text-red-500"}`}>
+            {responseMessage}
+          </p>
+        )}
 
-            {/* Email Field */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">
-                    Email
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      className="placeholder:text-slate-900 dark:placeholder:text-zinc-400"
-                      {...field}
-                      placeholder="Enter your email"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <form onSubmit={handleSubmit} className="space-y-4 dm:w-[70%] mx-auto">
+          <label className="text-lg md:text-2xl text-slate-900 dark:text-zinc-400">Name</label>
+          <Input name="name" value={formData.name} onChange={handleChange} placeholder="Enter your name" required />
 
-            {/* Message Field */}
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-slate-900 dark:text-zinc-400 text-lg md:text-2xl">
-                    Message
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="placeholder:text-slate-900 dark:placeholder:text-zinc-400 h-50"
-                      {...field}
-                      placeholder="Write your message..."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <label className="text-lg md:text-2xl text-slate-900 dark:text-zinc-400">Email</label>
+          <Input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" required />
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-fit py-2 flex items-center gap-x-2 text-slate-100 bg-slate-900 hover:bg-slate-800 dark:bg-zinc-200 dark:hover:bg-zinc-400 dark:text-zinc-900 cursor-pointer"
-            >
-              Send Message
-            </Button>
-          </form>
-        </Form>
+          <label className="text-lg md:text-2xl text-slate-900 dark:text-zinc-400">Message</label>
+          <Textarea className="min-h-50" name="message" value={formData.message} onChange={handleChange} placeholder="Write your message..." required />
+
+          <Button type="submit" disabled={loading} className="w-fit bg-slate-900 text-slate-200 dark:bg-zinc-700 dark:text-zinc-400">
+            {loading ? "Sending..." : "Send Message"}
+          </Button>
+        </form>
       </div>
     </section>
   );
