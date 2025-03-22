@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import { ToastContainer } from 'react-toastify';
 
 const AppLayout = () => {
 
@@ -26,6 +27,7 @@ const AppLayout = () => {
     <div className={darkMode ? "dark" : ""}>
       <main className="w-full min-h-[100vh] bg-slate-100 dark:bg-zinc-900">
         <Header darkMode={darkMode} handleDarkMode={handleDarkMode} />
+        <ToastContainer />
         <Outlet context={{ darkMode }} />
         <Footer darkMode={darkMode} />
       </main>
